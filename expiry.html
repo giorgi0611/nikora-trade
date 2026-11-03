@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>Expiry Dates - Nikora Tracker</title>
+  <link rel="stylesheet" href="expiry.css">
+</head>
+
+<div class="background-particles" id="background-particles"></div>
+
+<script>
+const particles = document.getElementById("background-particles");
+
+for (let i = 0; i < 35; i++) {
+    const particle = document.createElement("span");
+
+    particle.style.left = Math.random() * 100 + "%";
+    particle.style.animationDuration = (8 + Math.random() * 12) + "s";
+    particle.style.animationDelay = Math.random() * 10 + "s";
+
+    const size = 3 + Math.random() * 5;
+    particle.style.width = size + "px";
+    particle.style.height = size + "px";
+
+    particles.appendChild(particle);
+}
+</script>
+
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">
+      NIKORA<span> TRACKER</span>
+    </a>
+
+    <button
+      type="button"
+      class="menu-toggle"
+      id="menu-toggle"
+      aria-label="მენიუს გახსნა"
+      aria-expanded="false"
+      aria-controls="header-nav"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header-nav nav-links" id="header-nav">
+      <a href="index.html">პროდუქტები</a>
+
+      <a href="expiry.html" class="active expiry-link">
+        ვადების კონტროლი
+        <span id="warning-count" class="warning-count">0</span>
+      </a>
+    </nav>
+
+    <div class="header-actions">
+      <button
+        type="button"
+        id="enable-notifications"
+        class="theme-btn"
+      >
+        🔔 შეტყობინებების ჩართვა
+      </button>
+
+      <button
+        type="button"
+        id="theme-toggle"
+        class="theme-btn"
+        aria-label="თემის შეცვლა"
+      >
+        ☀️
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="welcome">
+      <div>
+        <span class="welcome-label">NIKORA MANAGEMENT SYSTEM</span>
+        <h1>ვადების კონტროლი</h1>
+        <p>აკონტროლე პროდუქტების ვადის გასვლის თარიღები.</p>
+      </div>
+
+      <div class="date" id="today"></div>
+    </section>
+
+    <section class="stats">
+      <div class="stat-card">
+        <span>კონტროლში არსებული</span>
+        <h2 id="tracked-products">0</h2>
+      </div>
+
+      <div class="stat-card danger-card">
+        <span>3 დღეში ან ნაკლებში</span>
+        <h2 id="expiring-products">0</h2>
+      </div>
+
+      <div class="stat-card">
+        <span>ვადაგასული</span>
+        <h2 id="expired-products">0</h2>
+      </div>
+    </section>
+
+    <section class="products-section">
+
+      <div class="section-heading">
+        <div>
+          <span class="section-label">EXPIRY MANAGEMENT</span>
+          <h2>ჩემი პროდუქტები</h2>
+        </div>
+
+        <a href="index.html" class="primary-btn">
+          + პროდუქტის დამატება
+        </a>
+      </div>
+
+      <div class="toolbar">
+
+        <input
+          type="search"
+          id="search"
+          placeholder="🔍 მოძებნე პროდუქტი..."
+          aria-label="პროდუქტის ძებნა"
+        >
+
+        <select id="expiry-filter" aria-label="ვადის ფილტრი">
+          <option value="all">ყველა</option>
+          <option value="danger">3 დღეში ან ნაკლებში</option>
+          <option value="safe">3 დღეზე მეტი</option>
+          <option value="expired">ვადაგასული</option>
+        </select>
+
+        <select id="expiry-sort" aria-label="პროდუქტების დალაგება">
+          <option value="nearest">უახლოესი ვადა</option>
+          <option value="farthest">შორეული ვადა</option>
+          <option value="name">სახელი</option>
+        </select>
+
+      </div>
+
+      <div class="catalog-info">
+        <span id="results-count">0 პროდუქტი</span>
+      </div>
+
+      <div id="expiry-container" class="products-grid"></div>
+
+      <p id="empty-message" class="empty-message hidden">
+        ჯერ არ გაქვს გადატანილი პროდუქტები.
+      </p>
+
+    </section>
+
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="expiry.js" defer></script>
+
+</body>
+</html>

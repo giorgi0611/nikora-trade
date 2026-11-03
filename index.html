@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>Nikora Expiry Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<div class="background-particles" id="background-particles"></div>
+
+<script>
+const particles = document.getElementById("background-particles");
+
+for (let i = 0; i < 35; i++) {
+    const particle = document.createElement("span");
+
+    particle.style.left = Math.random() * 100 + "%";
+    particle.style.animationDuration = (8 + Math.random() * 12) + "s";
+    particle.style.animationDelay = Math.random() * 10 + "s";
+
+    const size = 3 + Math.random() * 5;
+    particle.style.width = size + "px";
+    particle.style.height = size + "px";
+
+    particles.appendChild(particle);
+}
+</script>
+
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">
+      NIKORA<span> TRACKER</span>
+    </a>
+
+    <button
+      type="button"
+      class="menu-toggle"
+      id="menu-toggle"
+      aria-label="მენიუს გახსნა"
+      aria-expanded="false"
+      aria-controls="header-nav"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header-nav nav-links" id="header-nav">
+      <a href="index.html" class="active">პროდუქტები</a>
+
+      <a href="expiry.html" class="expiry-link">
+        ვადების კონტროლი
+        <span id="warning-count" class="warning-count">0</span>
+      </a>
+    </nav>
+
+    <div class="header-actions">
+      <button
+        type="button"
+        id="enable-notifications"
+        class="theme-btn"
+      >
+        🔔 შეტყობინებების ჩართვა
+      </button>
+
+      <button
+        type="button"
+        id="theme-toggle"
+        class="theme-btn"
+        aria-label="თემის შეცვლა"
+      >
+        ☀️
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="welcome">
+      <div class="welcome-content">
+        <span class="welcome-label">NIKORA MANAGEMENT SYSTEM</span>
+        <h1>პროდუქციის მართვა</h1>
+        <p>
+          მოძებნე, გაფილტრე და აკონტროლე პროდუქციის ვადები.
+        </p>
+      </div>
+
+      <div class="date" id="today"></div>
+    </section>
+
+    <section class="stats">
+
+      <div class="stat-card">
+        <span>ყველა პროდუქტი</span>
+        <h2 id="total-products">0</h2>
+      </div>
+
+      <div class="stat-card">
+        <span>ვადების კონტროლში</span>
+        <h2 id="tracked-products">0</h2>
+      </div>
+
+      <div class="stat-card danger-card">
+        <span>ვადა იწურება მალე</span>
+        <h2 id="expiring-products">0</h2>
+      </div>
+
+      <div class="stat-card">
+        <span>ვადაგასული</span>
+        <h2 id="expired-products">0</h2>
+      </div>
+
+    </section>
+
+    <section class="products-section">
+
+      <div class="section-heading">
+        <div>
+          <span class="section-label">PRODUCT COLLECTION</span>
+          <h2>პროდუქციის კატალოგი</h2>
+        </div>
+
+        <button
+          type="button"
+          id="add-product-btn"
+          class="primary-btn"
+        >
+          + პროდუქტის დამატება
+        </button>
+      </div>
+
+      <div class="toolbar">
+
+        <input
+          type="search"
+          id="search"
+          placeholder="🔍 მოძებნე პროდუქტი..."
+          aria-label="პროდუქტის ძებნა"
+        >
+
+        <select id="category-filter" aria-label="კატეგორიის ფილტრი">
+          <option value="all">ყველა კატეგორია</option>
+          <option value="რძის ნაწარმი">რძის ნაწარმი</option>
+          <option value="ხორცი">ხორცი</option>
+          <option value="ტკბილეული">ტკბილეული</option>
+          <option value="სასმელები">სასმელები</option>
+          <option value="პური">პური</option>
+          <option value="კონსერვაცია">კონსერვაცია</option>
+          <option value="შვრია-ბურღული">შვრია-ბურღული</option>
+          <option value="მაკარონი-ფქვილი">მაკარონი-ფქვილი</option>
+          <option value="ზეთი">ზეთი</option>
+          <option value="სუნელები">სუნელები</option>
+          <option value="ტკბილი კონსერვაცია">ტკბილი კონსერვაცია</option>
+          <option value="სნექები">სნექები</option>
+          <option value="ჩაი-ყავა">ჩაი-ყავა</option>
+          <option value="გაყინულები">გაყინულები</option>
+        </select>
+
+        <select id="sort" aria-label="პროდუქტების დალაგება">
+          <option value="name">სახელი (ა-ჰ)</option>
+          <option value="name-desc">სახელი (ჰ-ა)</option>
+          <option value="category">კატეგორია</option>
+          <option value="price-low">ფასი (დაბლიდან მაღლა)</option>
+          <option value="price-high">ფასი (მაღლიდან დაბლა)</option>
+        </select>
+
+      </div>
+
+      <div class="catalog-info">
+        <span id="results-count">0 პროდუქტი</span>
+
+        <button
+          type="button"
+          id="reset-filters"
+          class="reset-btn"
+        >
+          ფილტრების გასუფთავება
+        </button>
+      </div>
+
+      <div
+        id="products-container"
+        class="products-grid"
+      ></div>
+
+      <p id="empty-message" class="empty-message hidden">
+        პროდუქტი ვერ მოიძებნა.
+      </p>
+
+    </section>
+
+    <section class="import-section">
+      <div class="import-heading">
+        <span class="section-label">DATA MANAGEMENT</span>
+        <h3>კატალოგის იმპორტი</h3>
+        <p>
+          შეგიძლია პროდუქციის მონაცემები CSV ფაილიდან დაამატო.
+        </p>
+      </div>
+
+      <input
+        type="file"
+        id="catalog-file"
+        accept=".csv"
+      >
+
+      <small>CSV სვეტები: name, category, image, price</small>
+    </section>
+
+  </main>
+
+  <div id="product-modal" class="modal hidden">
+    <div class="modal-content">
+
+      <button
+        type="button"
+        class="close-modal"
+        id="close-modal"
+        aria-label="ფანჯრის დახურვა"
+      >
+        x
+      </button>
+
+      <h2>ახალი პროდუქტი</h2>
+
+      <form id="product-form">
+
+        <label for="product-name">პროდუქტის სახელი</label>
+        <input
+          type="text"
+          id="product-name"
+          required
+        >
+
+        <label for="product-category">კატეგორია</label>
+        <select id="product-category" required>
+          <option value="რძის ნაწარმი">რძის ნაწარმი</option>
+          <option value="ხორცი">ხორცი</option>
+          <option value="სასმელები">სასმელები</option>
+          <option value="ტკბილეული">ტკბილეული</option>
+          <option value="პური">პური</option>
+          <option value="სხვა">სხვა</option>
+          <option value="კონსერვაცია">კონსერვაცია</option>
+          <option value="შვრია-ბურღული">შვრია-ბურღული</option>
+          <option value="მაკარონი-ფქვილი">მაკარონი-ფქვილი</option>
+          <option value="ზეთი">ზეთი</option>
+          <option value="სუნელები">სუნელები</option>
+          <option value="ტკბილი კონსერვაცია">ტკბილი კონსერვაცია</option>
+          <option value="სნექები">სნექები</option>
+          <option value="ჩაი-ყავა">ჩაი-ყავა</option>
+          <option value="გაყინულები">გაყინულები</option>
+        </select>
+
+        <label for="product-price">ფასი (₾)</label>
+        <input
+          type="number"
+          id="product-price"
+          min="0"
+          step="0.01"
+        >
+        <div class="form-group">
+  <label for="product-code">
+    პროდუქტის კოდი / შტრიხკოდი
+  </label>
+
+  <input
+    type="text"
+    id="product-code"
+    placeholder="შეიყვანე პროდუქტის კოდი"
+  />
+</div>
+        <label for="product-image">სურათის URL (არასავალდებულო)</label>
+        <input
+          type="url"
+          id="product-image"
+          placeholder="https://..."
+        >
+
+        <button type="submit" class="primary-btn">
+          პროდუქტის დამატება
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="script.js" defer></script>
+
+</body>
+</html>
